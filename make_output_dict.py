@@ -1,27 +1,51 @@
+from interface import common_items_in_dicts
 from json_save_load import save_to_json
+from statistics import DoubledItemsCounter
 from validate_jsons import fix_keys_in_jsons
 
 
-def check_if_item_in_output_dict(output_dict, item):
-
+@DoubledItemsCounter
+def return_common_dict(output_dict, item):
     for key in output_dict:
+
         output_item = output_dict[key]
 
-        if output_item.get('phone') and item.get('phone'):
-            if output_item['phone'] == item['phone'] and output_item['phone'] != None:
-                return True
+        for common_item_key in common_items_in_dicts.keys():
+            if output_item.get(common_item_key) and item.get(common_item_key):
 
-        if output_item.get('email') and item.get('email'):
-            if output_item['email'] == item['email']:
-                return True
+                if common_items_in_dicts.get(common_item_key):
+                    search_pattern = common_items_in_dicts.get(common_item_key)
+                    x = search_pattern.findall(output_item[common_item_key])
+                    y = search_pattern.findall(item[common_item_key])
 
-    return False
+                    for item1 in x:
+                        for item2 in y:
+                            if item1[0] == item2[0]:
+                                return output_dict[key]
+
+                elif output_item[common_item_key] == item[common_item_key]:
+                    return output_dict[key]
+    return None
+
+
+def merge_records(d1, d2):
+    output_dict = d2.copy()
+    for key, value in d1.items():
+        if d2.get(key) is None:
+            output_dict[key] = value
+        elif len(d2[key]) > len(d2[key]):
+            output_dict[key] = value
+
+    return output_dict
 
 
 def update_output_dict(merged_output_dict, json):
     for key in json:
-        if not check_if_item_in_output_dict(merged_output_dict, json[key]):
+        item = return_common_dict(merged_output_dict, json[key])
+        if not item:
             merged_output_dict[key] = json[key]
+        else:
+            merged_output_dict[key] = merge_records(item, json[key])
 
     return merged_output_dict
 

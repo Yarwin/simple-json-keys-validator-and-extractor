@@ -55,7 +55,6 @@ def fix_record_in_json(data_to_fix):
     output_dict = {}
 
     for key_to_fix in data_to_fix:
-
         output_dict = fix_key(data_to_fix, output_dict, key_to_fix)
 
     return output_dict
