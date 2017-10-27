@@ -5,7 +5,7 @@ from validate_jsons import fix_keys_in_jsons
 
 
 @DoubledItemsCounter
-def return_common_dict(output_dict, item):
+def return_common_dict_entry(output_dict, item):
     for key in output_dict:
 
         output_item = output_dict[key]
@@ -33,6 +33,8 @@ def merge_records(d1, d2):
     for key, value in d1.items():
         if d2.get(key) is None:
             output_dict[key] = value
+        elif type(d2.get(key)) is bool or type(d1.get(key)) is bool:
+            output_dict[key] = value
         elif len(d2[key]) > len(d2[key]):
             output_dict[key] = value
 
@@ -41,7 +43,7 @@ def merge_records(d1, d2):
 
 def update_output_dict(merged_output_dict, json):
     for key in json:
-        item = return_common_dict(merged_output_dict, json[key])
+        item = return_common_dict_entry(merged_output_dict, json[key])
         if not item:
             merged_output_dict[key] = json[key]
         else:
@@ -50,12 +52,11 @@ def update_output_dict(merged_output_dict, json):
     return merged_output_dict
 
 
-def make_merged_output_dict(json_files, jsons_path, output_path):
+def make_merged_output_dict(json_files, jsons_path):
     merged_output_dict = {}
     for json in json_files:
         json_dict = fix_keys_in_jsons(json, jsons_path)
         print('appending {0} to output dict'.format(json))
         merged_output_dict = update_output_dict(merged_output_dict, json_dict)
 
-    save_to_json(merged_output_dict, output_path)
     return merged_output_dict

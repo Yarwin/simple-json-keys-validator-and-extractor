@@ -1,6 +1,7 @@
 from os import listdir
 
-from make_output_dict import make_merged_output_dict, return_common_dict
+from json_save_load import save_to_json
+from make_output_dict import make_merged_output_dict, return_common_dict_entry
 
 if __name__ == '__main__':
 
@@ -8,5 +9,6 @@ if __name__ == '__main__':
     output_path = './OUTPUT_DATA/result.json'
 
     jsons = [f for f in listdir(jsons_path) if f.endswith('.json')]
-    make_merged_output_dict(jsons, jsons_path, output_path)
-    print(return_common_dict.items_rejected)
+    data = make_merged_output_dict(jsons, jsons_path)
+    save_to_json(data, output_path)
+    print(return_common_dict_entry.items_rejected)

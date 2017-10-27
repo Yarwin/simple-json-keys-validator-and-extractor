@@ -1,4 +1,7 @@
 class DoubledItemsCounter():
+    """
+    simple decorator for counting occurance of doubled items
+    """
     def __init__(self, f):
         self.f = f
         self.items_doubled = 0
