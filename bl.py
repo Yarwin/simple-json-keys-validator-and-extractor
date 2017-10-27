@@ -10,6 +10,3 @@ if __name__ == '__main__':
     jsons = [f for f in listdir(jsons_path) if f.endswith('.json')]
     make_merged_output_dict(jsons, jsons_path, output_path)
     print(return_common_dict.items_rejected)
-
-#5176
-#473 for devs
